@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сезоны — BOTANICA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.pw { padding-top: 8rem; padding-bottom: 2rem; }
+.page-h1 {
+  font-family: 'Cormorant', serif;
+  font-weight: 300;
+  font-size: clamp(3.5rem, 5.5vw, 5.8rem);
+  color: var(--cream);
+  line-height: 1.0;
+}
+.page-h1 em { font-style: italic; color: var(--sage2); }
+
+/* Season panels — big 2×2 grid */
+.seasons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  margin-bottom: 6rem;
+}
+
+.sp {
+  background: var(--bg);
+  min-height: 340px;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  cursor: none;
+  transition: background .4s;
+}
+.sp:hover { background: var(--bg2); }
+
+/* Ambient glow per season */
+.sp-spring .sp-glow { background: radial-gradient(ellipse at 80% 20%, rgba(143,187,136,.14) 0%, transparent 60%); }
+.sp-summer .sp-glow { background: radial-gradient(ellipse at 80% 20%, rgba(200,162,74,.12) 0%, transparent 60%); }
+.sp-autumn .sp-glow { background: radial-gradient(ellipse at 80% 20%, rgba(181,98,42,.12) 0%, transparent 60%); }
+.sp-winter .sp-glow { background: radial-gradient(ellipse at 80% 20%, rgba(120,160,210,.1) 0%, transparent 60%); }
+
+.sp-glow {
+  position: absolute; inset: 0;
+  opacity: 0;
+  transition: opacity .5s;
+  pointer-events: none;
+}
+.sp:hover .sp-glow { opacity: 1; }
+
+.sp-art {
+  position: absolute; top: 2.5rem; right: 2.5rem;
+  width: 80px; height: 80px;
+  opacity: .1;
+  transition: opacity .4s, transform .5s cubic-bezier(.22,.68,0,1);
+}
+.sp:hover .sp-art { opacity: .22; transform: scale(1.1) rotate(6deg); }
+
+/* Bottom line indicator */
+.sp::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0;
+  height: 2px; width: 0;
+  transition: width .5s cubic-bezier(.22,.68,0,1);
+}
+.sp-spring::after { background: var(--sage); }
+.sp-summer::after { background: var(--gold); }
+.sp-autumn::after { background: #b5622a; }
+.sp-winter::after { background: #78a0d2; }
+.sp:hover::after { width: 100%; }
+
+.sp-num {
+  font-size: .62rem; letter-spacing: .28em; font-weight: 300; margin-bottom: .6rem;
+}
+.sp-spring .sp-num { color: var(--sage); }
+.sp-summer .sp-num { color: var(--gold); }
+.sp-autumn .sp-num { color: #c07840; }
+.sp-winter .sp-num { color: #78a0d2; }
+
+.sp-name {
+  font-family: 'Cormorant', serif;
+  font-size: 2.8rem; font-weight: 300; color: var(--cream); line-height: 1;
+  margin-bottom: .8rem;
+}
+.sp-months {
+  font-size: .62rem; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--dim); margin-bottom: 1.2rem;
+}
+.sp-text {
+  font-family: 'Cormorant', serif;
+  font-size: 1.05rem; color: var(--dim); line-height: 1.72;
+  max-width: 38ch;
+  margin-bottom: 1.5rem;
+}
+.sp-plants { display: flex; gap: .4rem; flex-wrap: wrap; }
+.stag {
+  padding: .2rem .7rem;
+  font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
+  border: 1px solid var(--border); color: var(--dim);
+  transition: border-color .25s, color .25s;
+}
+.sp:hover .stag { border-color: rgba(255,255,255,.15); color: var(--text); }
+
+/* ── Timeline ── */
+.tl-head {
+  display: flex; align-items: center; gap: 2rem;
+  margin-bottom: 3rem;
+}
+.tl-head::after {
+  content: '';
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+.timeline {
+  position: relative;
+  padding-left: 2.8rem;
+  margin-bottom: 5rem;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 0; top: .6rem; bottom: .6rem;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--sage) 15%, var(--sage) 85%, transparent);
+  opacity: .25;
+}
+
+.tl-item {
+  position: relative;
+  padding-bottom: 3rem;
+}
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -3.2rem; top: .4rem;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--dim);
+  background: var(--bg);
+  transition: border-color .3s, background .3s;
+}
+.tl-item:hover::before { border-color: var(--sage); background: var(--sage); }
+
+.tl-date { font-size: .6rem; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); margin-bottom: .5rem; }
+.tl-name {
+  font-family: 'Cormorant', serif;
+  font-size: 1.4rem; font-weight: 300; color: var(--cream);
+  margin-bottom: .5rem; line-height: 1.2;
+  transition: color .25s;
+}
+.tl-item:hover .tl-name { color: var(--sage2); }
+.tl-body {
+  font-family: 'Cormorant', serif;
+  font-size: 1rem; color: var(--dim); line-height: 1.72; max-width: 55ch;
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<nav class="nav">
+  <a class="nav-logo" href="index.html">BOT<i>A</i>NICA</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="atlas.html">Атлас</a></li>
+    <li><a href="seasons.html" class="active">Сезоны</a></li>
+    <li><a href="journal.html">Дневник</a></li>
+    <li><a href="contact.html">Контакт</a></li>
+  </ul>
+</nav>
+
+<div class="pw">
+  <header class="reveal" style="margin-bottom:5rem">
+    <div class="label">02 / Сезоны</div>
+    <h1 class="page-h1">Природа<br>во <em>времени</em></h1>
+    <div class="hr"></div>
+    <p class="body-copy" style="max-width:52ch">
+      Четыре сезона — четыре состояния мира. Каждый месяц несёт 
+      новые запахи, текстуры, цвета. Мы учимся читать этот календарь.
+    </p>
+  </header>
+
+  <div class="seasons-grid">
+
+    <div class="sp sp-spring reveal">
+      <div class="sp-glow"></div>
+      <svg class="sp-art" viewBox="0 0 80 80" fill="none">
+        <circle cx="40" cy="40" r="28" stroke="#8fbb88" stroke-width=".8"/>
+        <ellipse cx="40" cy="16" rx="9" ry="17" stroke="#8fbb88" stroke-width=".6" transform="rotate(0 40 40)"/>
+        <ellipse cx="40" cy="16" rx="9" ry="17" stroke="#8fbb88" stroke-width=".6" transform="rotate(60 40 40)"/>
+        <ellipse cx="40" cy="16" rx="9" ry="17" stroke="#8fbb88" stroke-width=".6" transform="rotate(120 40 40)"/>
+        <ellipse cx="40" cy="16" rx="9" ry="17" stroke="#8fbb88" stroke-width=".6" transform="rotate(180 40 40)"/>
+        <ellipse cx="40" cy="16" rx="9" ry="17" stroke="#8fbb88" stroke-width=".6" transform="rotate(240 40 40)"/>
+        <ellipse cx="40" cy="16" rx="9" ry="17" stroke="#8fbb88" stroke-width=".6" transform="rotate(300 40 40)"/>
+        <circle cx="40" cy="40" r="5" stroke="#8fbb88" stroke-width=".5"/>
+      </svg>
+      <div class="sp-num">01</div>
+      <div class="sp-name">Весна</div>
+      <div class="sp-months">Март · Апрель · Май</div>
+      <div class="sp-text">Пробуждение. Первые ростки пробивают холодную землю. Воздух пахнет свежестью и обещанием.</div>
+      <div class="sp-plants">
+        <span class="stag">Подснежник</span><span class="stag">Тюльпан</span><span class="stag">Черёмуха</span>
+      </div>
+    </div>
+
+    <div class="sp sp-summer reveal">
+      <div class="sp-glow"></div>
+      <svg class="sp-art" viewBox="0 0 80 80" fill="none">
+        <circle cx="40" cy="40" r="14" stroke="#c8a24a" stroke-width=".8"/>
+        <line x1="40" y1="6"  x2="40" y2="18" stroke="#c8a24a" stroke-width=".7"/>
+        <line x1="40" y1="62" x2="40" y2="74" stroke="#c8a24a" stroke-width=".7"/>
+        <line x1="6"  y1="40" x2="18" y2="40" stroke="#c8a24a" stroke-width=".7"/>
+        <line x1="62" y1="40" x2="74" y2="40" stroke="#c8a24a" stroke-width=".7"/>
+        <line x1="15" y1="15" x2="24" y2="24" stroke="#c8a24a" stroke-width=".6"/>
+        <line x1="56" y1="56" x2="65" y2="65" stroke="#c8a24a" stroke-width=".6"/>
+        <line x1="65" y1="15" x2="56" y2="24" stroke="#c8a24a" stroke-width=".6"/>
+        <line x1="24" y1="56" x2="15" y2="65" stroke="#c8a24a" stroke-width=".6"/>
+      </svg>
+      <div class="sp-num">02</div>
+      <div class="sp-name">Лето</div>
+      <div class="sp-months">Июнь · Июль · Август</div>
+      <div class="sp-text">Зенит жизни. Всё цветёт, гудит, благоухает. Солнце стоит высоко, тени короткие и резкие.</div>
+      <div class="sp-plants">
+        <span class="stag">Роза</span><span class="stag">Лаванда</span><span class="stag">Подсолнух</span>
+      </div>
+    </div>
+
+    <div class="sp sp-autumn reveal">
+      <div class="sp-glow"></div>
+      <svg class="sp-art" viewBox="0 0 80 80" fill="none">
+        <path d="M40 70 C18 52 9 32 22 18 C31 9 46 17 50 29 C54 17 69 9 72 24 C80 44 60 64 40 70Z" stroke="#c07840" stroke-width=".8" fill="none"/>
+        <line x1="40" y1="70" x2="40" y2="18" stroke="#c07840" stroke-width=".4"/>
+      </svg>
+      <div class="sp-num">03</div>
+      <div class="sp-name">Осень</div>
+      <div class="sp-months">Сентябрь · Октябрь · Ноябрь</div>
+      <div class="sp-text">Прощание в цвете. Природа горит последним пламенем. Запах прелых листьев и земли.</div>
+      <div class="sp-plants">
+        <span class="stag">Клён</span><span class="stag">Рябина</span><span class="stag">Хризантема</span>
+      </div>
+    </div>
+
+    <div class="sp sp-winter reveal">
+      <div class="sp-glow"></div>
+      <svg class="sp-art" viewBox="0 0 80 80" fill="none">
+        <line x1="40" y1="5"  x2="40" y2="75" stroke="#78a0d2" stroke-width=".8"/>
+        <line x1="5"  y1="40" x2="75" y2="40" stroke="#78a0d2" stroke-width=".8"/>
+        <line x1="16" y1="16" x2="64" y2="64" stroke="#78a0d2" stroke-width=".6"/>
+        <line x1="64" y1="16" x2="16" y2="64" stroke="#78a0d2" stroke-width=".6"/>
+        <circle cx="40" cy="40" r="11" stroke="#78a0d2" stroke-width=".6"/>
+        <circle cx="40" cy="40" r="4"  stroke="#78a0d2" stroke-width=".4"/>
+      </svg>
+      <div class="sp-num">04</div>
+      <div class="sp-name">Зима</div>
+      <div class="sp-months">Декабрь · Январь · Февраль</div>
+      <div class="sp-text">Сон и тишина. Под снегом хранятся семена будущего. Зима не убивает — она готовит.</div>
+      <div class="sp-plants">
+        <span class="stag">Омела</span><span class="stag">Падуб</span><span class="stag">Морозник</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="tl-head reveal">
+    <div class="label" style="margin:0">Ботанический календарь</div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item reveal">
+      <div class="tl-date">Февраль – Март</div>
+      <div class="tl-name">Первые подснежники</div>
+      <div class="tl-body">Galanthus nivalis пробивается сквозь снег — первый знак, что земля ожила. Луковица пережила мороз и спешит к свету.</div>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-date">Апрель – Май</div>
+      <div class="tl-name">Цветение плодовых деревьев</div>
+      <div class="tl-body">Яблони, вишни и груши окутываются белыми и розовыми облаками. Каждый цветок — потенциальный плод. Природа расточительна.</div>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-date">Июль – Август</div>
+      <div class="tl-name">Пик лавандовых полей</div>
+      <div class="tl-body">Прованс, Крым, Молдова — везде, где растёт лаванда, июль пахнет особенно. Пчёлы работают без устали.</div>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-date">Октябрь</div>
+      <div class="tl-name">Золотая осень клёна</div>
+      <div class="tl-body">Хлорофилл разрушается, открывая скрытые пигменты. То, что мы называем «листья окрасились» — обнажение истины.</div>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-date">Декабрь</div>
+      <div class="tl-name">Семена под снегом</div>
+      <div class="tl-body">Стратификация — обязательный холодный период для прорастания многих видов. Зима готовит весну.</div>
+    </div>
+  </div>
+
+  <div class="blockquote reveal">
+    <p>«Тот, кто смотрит снаружи, — видит сон. Кто смотрит внутрь — просыпается»</p>
+    <cite>— Карл Юнг</cite>
+  </div>
+
+</div>
+
+<footer>
+  <a href="atlas.html">← Атлас</a>
+  <span class="footer-c">Сезоны</span>
+  <a href="journal.html">Дневник →</a>
+</footer>
+
+<script>
+const C=document.getElementById('cur'),R=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;C.style.left=mx+'px';C.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;R.style.left=rx+'px';R.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,.sp').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+const io=new IntersectionObserver((es)=>es.forEach((e,i)=>{
+  if(e.isIntersecting){setTimeout(()=>e.target.classList.add('on'),i*75);io.unobserve(e.target);}
+}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

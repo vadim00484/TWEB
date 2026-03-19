@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Атлас — BOTANICA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+
+.pw { padding-top: 8rem; padding-bottom: 2rem; }
+
+.page-head { margin-bottom: 5.5rem; max-width: 680px; }
+
+.page-h1 {
+  font-family: 'Cormorant', serif;
+  font-weight: 300;
+  font-size: clamp(3.5rem, 5.5vw, 5.8rem);
+  color: var(--cream);
+  line-height: 1.0;
+  margin-bottom: .6rem;
+}
+.page-h1 em { font-style: italic; color: var(--sage2); }
+
+/* Featured */
+.featured {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 0;
+  border: 1px solid var(--border);
+  margin-bottom: 4rem;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(143,187,136,.04) 0%, transparent 60%);
+  position: relative;
+}
+.featured::before {
+  content: 'РАСТЕНИЕ МЕСЯЦА';
+  position: absolute; top: 1.5rem; right: 2rem;
+  font-size: .55rem; letter-spacing: .35em; color: var(--gold); opacity: .7;
+}
+.featured-body { padding: 3.5rem; }
+.featured-title {
+  font-family: 'Cormorant', serif;
+  font-size: 2.6rem;
+  font-weight: 300;
+  color: var(--cream);
+  line-height: 1.1;
+  margin: 1rem 0;
+}
+.featured-title em { font-style: italic; color: var(--sage2); }
+.featured-text {
+  font-family: 'Cormorant', serif;
+  font-size: 1.1rem;
+  color: var(--dim);
+  line-height: 1.78;
+  max-width: 56ch;
+}
+.featured-side {
+  border-left: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.2);
+  padding: 2rem;
+}
+.featured-side svg {
+  width: 140px; height: 140px;
+  opacity: .18;
+  animation: rotSlow 45s linear infinite;
+}
+@keyframes rotSlow { to { transform: rotate(360deg); } }
+
+/* Grid */
+.plant-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-bottom: 5rem;
+}
+
+.pc {
+  background: var(--bg);
+  padding: 2.5rem 2.2rem;
+  display: flex; flex-direction: column; gap: 1rem;
+  position: relative; overflow: hidden;
+  transition: background .35s;
+  cursor: none;
+}
+.pc:hover { background: var(--bg2); }
+
+.pc-glow {
+  position: absolute;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(143,187,136,.12) 0%, transparent 70%);
+  top: -30px; right: -30px;
+  opacity: 0;
+  transition: opacity .4s;
+  pointer-events: none;
+}
+.pc:hover .pc-glow { opacity: 1; }
+
+.pc-line {
+  position: absolute; bottom: 0; left: 0;
+  height: 1px; width: 0;
+  background: linear-gradient(90deg, var(--sage), transparent);
+  transition: width .5s cubic-bezier(.22,.68,0,1);
+}
+.pc:hover .pc-line { width: 100%; }
+
+.pc svg { width: 52px; height: 52px; opacity: .45; transition: opacity .3s, transform .4s cubic-bezier(.22,.68,0,1); }
+.pc:hover svg { opacity: .75; transform: scale(1.08) rotate(-3deg); }
+
+.pc-fam { font-size: .58rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+.pc-name {
+  font-family: 'Cormorant', serif;
+  font-size: 1.5rem; font-weight: 300; color: var(--cream); line-height: 1.1;
+}
+.pc-lat {
+  font-family: 'Cormorant', serif;
+  font-style: italic; font-size: .9rem; color: var(--dim);
+}
+.pc-desc {
+  font-family: 'Cormorant', serif;
+  font-size: 1rem; color: var(--dim); line-height: 1.7;
+}
+.pc-tags { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: auto; }
+.tag {
+  padding: .2rem .7rem;
+  border: 1px solid var(--border);
+  font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--dim);
+  transition: border-color .25s, color .25s;
+}
+.pc:hover .tag { border-color: rgba(143,187,136,.25); color: var(--sage); }
+
+@keyframes fadeU {
+  from { opacity:0; transform: translateY(22px); }
+  to   { opacity:1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<nav class="nav">
+  <a class="nav-logo" href="index.html">BOT<i>A</i>NICA</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="atlas.html" class="active">Атлас</a></li>
+    <li><a href="seasons.html">Сезоны</a></li>
+    <li><a href="journal.html">Дневник</a></li>
+    <li><a href="contact.html">Контакт</a></li>
+  </ul>
+</nav>
+
+<div class="pw">
+  <header class="page-head reveal">
+    <div class="label">01 / Атлас растений</div>
+    <h1 class="page-h1">Живая<br><em>энциклопедия</em></h1>
+    <div class="hr"></div>
+    <p class="body-copy" style="max-width:52ch">
+      Каждое растение здесь — отдельная история. Форма листа, ритм прожилок, запах 
+      после дождя. Атлас — попытка записать то, что обычно остаётся незамеченным.
+    </p>
+  </header>
+
+  <div class="featured reveal">
+    <div class="featured-body">
+      <div class="label">Растение месяца</div>
+      <h2 class="featured-title">Папоротник<br><em>орляк</em></h2>
+      <p class="featured-text">
+        Один из древнейших видов на Земле — появился 360 миллионов лет назад. 
+        Разворачивающийся лист орляка в Японии символизирует начало новой жизни. 
+        Его форма спирали — математически совершенна.
+      </p>
+    </div>
+    <div class="featured-side">
+      <svg viewBox="0 0 140 140" fill="none">
+        <circle cx="70" cy="70" r="60" stroke="#8fbb88" stroke-width=".7"/>
+        <circle cx="70" cy="70" r="40" stroke="#c8a24a" stroke-width=".5"/>
+        <circle cx="70" cy="70" r="20" stroke="#8fbb88" stroke-width=".4"/>
+        <circle cx="70" cy="70" r="4"  fill="#8fbb88" opacity=".5"/>
+        <line x1="70" y1="10" x2="70" y2="130" stroke="#8fbb88" stroke-width=".3"/>
+        <line x1="10" y1="70" x2="130" y2="70" stroke="#8fbb88" stroke-width=".3"/>
+        <line x1="28" y1="28" x2="112" y2="112" stroke="#8fbb88" stroke-width=".2"/>
+        <line x1="112" y1="28" x2="28" y2="112" stroke="#8fbb88" stroke-width=".2"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="plant-grid">
+
+    <div class="pc reveal">
+      <div class="pc-glow"></div>
+      <div class="pc-line"></div>
+      <svg viewBox="0 0 52 52" fill="none">
+        <circle cx="26" cy="26" r="18" stroke="#8fbb88" stroke-width=".8"/>
+        <path d="M26 8 C16 16 16 36 26 44 C36 36 36 16 26 8Z" stroke="#8fbb88" stroke-width=".6" fill="none"/>
+        <line x1="26" y1="8" x2="26" y2="44" stroke="#8fbb88" stroke-width=".4"/>
+      </svg>
+      <div class="pc-fam">Rosaceae</div>
+      <div class="pc-name">Роза</div>
+      <div class="pc-lat">Rosa gallica</div>
+      <div class="pc-desc">Символ красоты с античных времён. Более 150 видов по всему северному полушарию.</div>
+      <div class="pc-tags"><span class="tag">Цветущие</span><span class="tag">Многолетние</span></div>
+    </div>
+
+    <div class="pc reveal">
+      <div class="pc-glow"></div>
+      <div class="pc-line"></div>
+      <svg viewBox="0 0 52 52" fill="none">
+        <polygon points="26,5 47,43 5,43" stroke="#8fbb88" stroke-width=".8" fill="none"/>
+        <line x1="26" y1="5" x2="26" y2="43" stroke="#8fbb88" stroke-width=".4"/>
+        <line x1="15.5" y1="24" x2="36.5" y2="24" stroke="#8fbb88" stroke-width=".3"/>
+      </svg>
+      <div class="pc-fam">Asparagaceae</div>
+      <div class="pc-name">Алоэ</div>
+      <div class="pc-lat">Aloe vera</div>
+      <div class="pc-desc">Суккулент с лечебными свойствами. Гель листьев используется в медицине тысячи лет.</div>
+      <div class="pc-tags"><span class="tag">Суккуленты</span><span class="tag">Лечебные</span></div>
+    </div>
+
+    <div class="pc reveal">
+      <div class="pc-glow"></div>
+      <div class="pc-line"></div>
+      <svg viewBox="0 0 52 52" fill="none">
+        <circle cx="26" cy="26" r="15" stroke="#8fbb88" stroke-width=".8"/>
+        <circle cx="26" cy="26" r="7" stroke="#8fbb88" stroke-width=".5"/>
+        <circle cx="26" cy="26" r="2.5" fill="#8fbb88" opacity=".5"/>
+        <line x1="26" y1="11" x2="26" y2="41" stroke="#8fbb88" stroke-width=".3"/>
+        <line x1="11" y1="26" x2="41" y2="26" stroke="#8fbb88" stroke-width=".3"/>
+      </svg>
+      <div class="pc-fam">Asteraceae</div>
+      <div class="pc-name">Ромашка</div>
+      <div class="pc-lat">Matricaria chamomilla</div>
+      <div class="pc-desc">Летний символ полей. Эфирные масла обладают противовоспалительным действием.</div>
+      <div class="pc-tags"><span class="tag">Однолетние</span><span class="tag">Лечебные</span></div>
+    </div>
+
+    <div class="pc reveal">
+      <div class="pc-glow"></div>
+      <div class="pc-line"></div>
+      <svg viewBox="0 0 52 52" fill="none">
+        <path d="M26 46 C26 46 6 33 6 20 C6 11 14 6 26 6 C38 6 46 11 46 20 C46 33 26 46 26 46Z" stroke="#8fbb88" stroke-width=".8" fill="none"/>
+        <line x1="26" y1="6" x2="26" y2="46" stroke="#8fbb88" stroke-width=".4"/>
+      </svg>
+      <div class="pc-fam">Fagaceae</div>
+      <div class="pc-name">Дуб</div>
+      <div class="pc-lat">Quercus robur</div>
+      <div class="pc-desc">Живёт до 1000 лет. Одно дерево является домом для 500 видов насекомых.</div>
+      <div class="pc-tags"><span class="tag">Деревья</span><span class="tag">Многолетние</span></div>
+    </div>
+
+    <div class="pc reveal">
+      <div class="pc-glow"></div>
+      <div class="pc-line"></div>
+      <svg viewBox="0 0 52 52" fill="none">
+        <path d="M26 44 Q8 32 11 16 Q18 5 26 6 Q34 5 41 16 Q44 32 26 44Z" stroke="#8fbb88" stroke-width=".8" fill="none"/>
+        <line x1="26" y1="6" x2="26" y2="44" stroke="#8fbb88" stroke-width=".4"/>
+        <path d="M16 16 Q26 24 36 16" stroke="#8fbb88" stroke-width=".3"/>
+        <path d="M12 28 Q26 36 40 28" stroke="#8fbb88" stroke-width=".3"/>
+      </svg>
+      <div class="pc-fam">Araceae</div>
+      <div class="pc-name">Монстера</div>
+      <div class="pc-lat">Monstera deliciosa</div>
+      <div class="pc-desc">Тропический исполин. Отверстия в листьях позволяют ветру проходить сквозь крону.</div>
+      <div class="pc-tags"><span class="tag">Тропические</span><span class="tag">Комнатные</span></div>
+    </div>
+
+    <div class="pc reveal">
+      <div class="pc-glow"></div>
+      <div class="pc-line"></div>
+      <svg viewBox="0 0 52 52" fill="none">
+        <line x1="26" y1="46" x2="26" y2="6" stroke="#8fbb88" stroke-width=".8"/>
+        <path d="M26 33 C16 28 11 20 15 13" stroke="#8fbb88" stroke-width=".7" fill="none"/>
+        <path d="M26 25 C36 20 41 12 37 5" stroke="#8fbb88" stroke-width=".7" fill="none"/>
+        <path d="M26 41 C18 38 13 32 16 26" stroke="#8fbb88" stroke-width=".6" fill="none"/>
+      </svg>
+      <div class="pc-fam">Polypodiaceae</div>
+      <div class="pc-name">Папоротник</div>
+      <div class="pc-lat">Polypodium vulgare</div>
+      <div class="pc-desc">Древнейшее растение Земли. В японской культуре — символ долголетия.</div>
+      <div class="pc-tags"><span class="tag">Древние</span><span class="tag">Теневые</span></div>
+    </div>
+
+  </div>
+
+  <div class="blockquote reveal">
+    <p>«Изучать природу — значит разговаривать с Богом»</p>
+    <cite>— Карл Линней, Systema Naturae, 1735</cite>
+  </div>
+
+</div>
+
+<footer>
+  <a href="index.html">← Главная</a>
+  <span class="footer-c">Атлас растений</span>
+  <a href="seasons.html">Сезоны →</a>
+</footer>
+
+<script>
+const C=document.getElementById('cur'),R=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;C.style.left=mx+'px';C.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;R.style.left=rx+'px';R.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,.pc,.btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+const io=new IntersectionObserver((es)=>es.forEach((e,i)=>{
+  if(e.isIntersecting){setTimeout(()=>e.target.classList.add('on'),i*70);io.unobserve(e.target);}
+}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дневник — BOTANICA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.pw { padding-top: 8rem; padding-bottom: 2rem; }
+.page-h1 {
+  font-family: 'Cormorant', serif;
+  font-weight: 300;
+  font-size: clamp(3.5rem, 5.5vw, 5.8rem);
+  color: var(--cream); line-height: 1.0;
+}
+.page-h1 em { font-style: italic; color: var(--sage2); }
+
+/* Featured note */
+.featured-note {
+  position: relative;
+  border: 1px solid var(--border);
+  padding: 4rem;
+  margin-bottom: 5rem;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(143,187,136,.04) 0%, transparent 50%);
+}
+.featured-note::before {
+  content: '✦';
+  position: absolute; top: 1.8rem; right: 2rem;
+  color: var(--gold); opacity: .5; font-size: .85rem;
+}
+.fn-bg {
+  position: absolute; right: 3.5rem; top: 50%;
+  transform: translateY(-50%);
+  width: 150px; height: 150px;
+  opacity: .05;
+  animation: rotSlow 50s linear infinite;
+}
+@keyframes rotSlow { to { transform: translateY(-50%) rotate(360deg); } }
+.fn-title {
+  font-family: 'Cormorant', serif;
+  font-size: 2.5rem; font-weight: 300;
+  color: var(--cream); line-height: 1.1;
+  margin: 1rem 0;
+  max-width: 22ch;
+}
+.fn-title em { font-style: italic; color: var(--sage2); }
+.fn-body {
+  font-family: 'Cormorant', serif;
+  font-size: 1.15rem; color: var(--dim);
+  line-height: 1.78; max-width: 60ch;
+  margin-bottom: 1.5rem;
+}
+.fn-meta { font-size: .6rem; letter-spacing: .25em; text-transform: uppercase; color: var(--dim); }
+
+/* Entries */
+.entries { }
+
+.entry {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 3rem;
+  padding: 3rem 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  transition: padding .3s, background .3s;
+  cursor: none;
+}
+.entry:hover { background: rgba(143,187,136,.02); padding-left: 1rem; padding-right: 1rem; margin: 0 -1rem; }
+
+.e-date { padding-top: .2rem; }
+.e-day {
+  font-family: 'Cormorant', serif;
+  font-size: 3.2rem; font-weight: 300;
+  color: var(--sage); opacity: .2; line-height: 1;
+  transition: opacity .3s;
+}
+.entry:hover .e-day { opacity: .45; }
+.e-mon { font-size: .6rem; letter-spacing: .25em; text-transform: uppercase; color: var(--dim); margin-top: .1rem; }
+.e-yr  { font-size: .58rem; color: rgba(255,255,255,.15); letter-spacing: .12em; }
+
+.e-body { }
+.e-cat { font-size: .6rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: .65rem; }
+.e-title {
+  font-family: 'Cormorant', serif;
+  font-size: 1.75rem; font-weight: 300;
+  color: var(--cream); line-height: 1.2;
+  margin-bottom: 1rem;
+  transition: color .3s;
+}
+.entry:hover .e-title { color: var(--sage2); }
+.e-text {
+  font-family: 'Cormorant', serif;
+  font-size: 1.05rem; color: var(--dim);
+  line-height: 1.78; max-width: 60ch;
+  margin-bottom: 1.2rem;
+}
+.e-tags { display: flex; gap: .4rem; flex-wrap: wrap; }
+.etag {
+  padding: .2rem .7rem;
+  border: 1px solid var(--border);
+  font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--dim);
+  transition: border-color .25s, color .25s;
+}
+.entry:hover .etag { border-color: rgba(143,187,136,.25); color: var(--sage); }
+
+/* side art on entries */
+.e-art {
+  position: absolute; right: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 60px; height: 60px;
+  opacity: .05;
+  transition: opacity .4s, transform .5s cubic-bezier(.22,.68,0,1);
+}
+.entry:hover .e-art { opacity: .15; transform: translateY(-50%) scale(1.12) rotate(-4deg); }
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<nav class="nav">
+  <a class="nav-logo" href="index.html">BOT<i>A</i>NICA</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="atlas.html">Атлас</a></li>
+    <li><a href="seasons.html">Сезоны</a></li>
+    <li><a href="journal.html" class="active">Дневник</a></li>
+    <li><a href="contact.html">Контакт</a></li>
+  </ul>
+</nav>
+
+<div class="pw">
+  <header class="reveal" style="margin-bottom:5rem">
+    <div class="label">03 / Дневник</div>
+    <h1 class="page-h1"><em>Записи</em><br>из поля</h1>
+    <div class="hr"></div>
+    <p class="body-copy" style="max-width:50ch">
+      Заметки из экспедиций, прогулок, утреннего чая у окна с видом на сад. 
+      Всё, что замечаешь, когда начинаешь смотреть по-настоящему.
+    </p>
+  </header>
+
+  <div class="featured-note reveal">
+    <svg class="fn-bg" viewBox="0 0 150 150" fill="none">
+      <circle cx="75" cy="75" r="65" stroke="#8fbb88" stroke-width=".7"/>
+      <circle cx="75" cy="75" r="45" stroke="#c8a24a" stroke-width=".5"/>
+      <circle cx="75" cy="75" r="25" stroke="#8fbb88" stroke-width=".4"/>
+      <circle cx="75" cy="75" r="7"  stroke="#8fbb88" stroke-width=".4"/>
+      <line x1="75" y1="10" x2="75" y2="140" stroke="#8fbb88" stroke-width=".3"/>
+      <line x1="10" y1="75" x2="140" y2="75" stroke="#8fbb88" stroke-width=".3"/>
+    </svg>
+    <div class="label">Запись недели</div>
+    <h2 class="fn-title">О тишине, которую<br>слышит только <em>трава</em></h2>
+    <p class="fn-body">
+      Сегодня лёг на землю в парке — прямо на траву, лицом вниз. Закрыл глаза. 
+      Через минуту начал слышать то, чего не замечал стоя: тихий звон насекомых, 
+      движение стеблей, запах влаги где-то глубоко. Земля живёт своим ритмом.
+    </p>
+    <div class="fn-meta">14 Марта · 2024 · Ботанический сад</div>
+  </div>
+
+  <div class="entries">
+
+    <div class="entry reveal">
+      <svg class="e-art" viewBox="0 0 60 60" fill="none">
+        <path d="M30 55 C12 42 8 24 22 11 C30 4 45 12 46 24 C56 12 68 4 67 20 C65 40 48 53 30 55Z" stroke="#8fbb88" stroke-width="1" fill="none"/>
+      </svg>
+      <div class="e-date">
+        <div class="e-day">07</div>
+        <div class="e-mon">Марта</div>
+        <div class="e-yr">2024</div>
+      </div>
+      <div class="e-body">
+        <div class="e-cat">Наблюдение</div>
+        <h3 class="e-title">Почему листья симметричны — и когда нет</h3>
+        <p class="e-text">Билатеральная симметрия листа — не случайность. Это оптимальное решение для равномерного получения света. Но у бегонии — асимметрия. Одна половина всегда больше другой. Она ловит рассеянный свет в тропическом лесу.</p>
+        <div class="e-tags"><span class="etag">Форма листа</span><span class="etag">Симметрия</span><span class="etag">Эволюция</span></div>
+      </div>
+    </div>
+
+    <div class="entry reveal">
+      <svg class="e-art" viewBox="0 0 60 60" fill="none">
+        <circle cx="30" cy="30" r="22" stroke="#c8a24a" stroke-width="1"/>
+        <line x1="30" y1="8" x2="30" y2="52" stroke="#c8a24a" stroke-width=".5"/>
+        <line x1="8" y1="30" x2="52" y2="30" stroke="#c8a24a" stroke-width=".5"/>
+      </svg>
+      <div class="e-date">
+        <div class="e-day">22</div>
+        <div class="e-mon">Февраля</div>
+        <div class="e-yr">2024</div>
+      </div>
+      <div class="e-body">
+        <div class="e-cat">Размышление</div>
+        <h3 class="e-title">Запах дождя называется петрикор</h3>
+        <p class="e-text">В 1964 году австралийские учёные дали имя этому запаху — petrichor. Его создаёт нефтяное вещество из сухой почвы и бактерия актиномицет. Природа пахнет своей историей.</p>
+        <div class="e-tags"><span class="etag">Запах</span><span class="etag">Дождь</span><span class="etag">Почва</span></div>
+      </div>
+    </div>
+
+    <div class="entry reveal">
+      <svg class="e-art" viewBox="0 0 60 60" fill="none">
+        <polygon points="30,5 55,52 5,52" stroke="#8fbb88" stroke-width="1" fill="none"/>
+        <line x1="30" y1="5" x2="30" y2="52" stroke="#8fbb88" stroke-width=".4"/>
+      </svg>
+      <div class="e-date">
+        <div class="e-day">03</div>
+        <div class="e-mon">Февраля</div>
+        <div class="e-yr">2024</div>
+      </div>
+      <div class="e-body">
+        <div class="e-cat">Экспедиция</div>
+        <h3 class="e-title">Зимний лес: форма без листьев</h3>
+        <p class="e-text">Зима — лучшее время для изучения архитектуры дерева. Без листьев видна вся система ветвления: фрактальная, повторяющаяся от ствола до последнего побега. Та же логика, что в нейронных сетях и молниях.</p>
+        <div class="e-tags"><span class="etag">Зима</span><span class="etag">Форма</span><span class="etag">Фракталы</span></div>
+      </div>
+    </div>
+
+    <div class="entry reveal">
+      <svg class="e-art" viewBox="0 0 60 60" fill="none">
+        <path d="M30 55 C30 55 5 38 5 22 C5 10 17 4 30 7 C43 4 55 10 55 22 C55 38 30 55 30 55Z" stroke="#c07840" stroke-width="1" fill="none"/>
+      </svg>
+      <div class="e-date">
+        <div class="e-day">18</div>
+        <div class="e-mon">Января</div>
+        <div class="e-yr">2024</div>
+      </div>
+      <div class="e-body">
+        <div class="e-cat">Теория</div>
+        <h3 class="e-title">Язык цвета в мире растений</h3>
+        <p class="e-text">Красный цветок говорит пчеле: «иди сюда». Белый ночью виден мотыльку. Ультрафиолетовые узоры служат посадочными полосами для опылителей. Цвет — это не красота для людей. Это коммуникация.</p>
+        <div class="e-tags"><span class="etag">Цвет</span><span class="etag">Опыление</span><span class="etag">Сигналы</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="blockquote reveal">
+    <p>«Посмотри на цветок достаточно долго — и он станет твоим другом»</p>
+    <cite>— Джорджия О'Киф</cite>
+  </div>
+
+</div>
+
+<footer>
+  <a href="seasons.html">← Сезоны</a>
+  <span class="footer-c">Дневник</span>
+  <a href="contact.html">Контакт →</a>
+</footer>
+
+<script>
+const C=document.getElementById('cur'),R=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;C.style.left=mx+'px';C.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;R.style.left=rx+'px';R.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,.entry').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+const io=new IntersectionObserver((es)=>es.forEach((e,i)=>{
+  if(e.isIntersecting){setTimeout(()=>e.target.classList.add('on'),i*80);io.unobserve(e.target);}
+}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
